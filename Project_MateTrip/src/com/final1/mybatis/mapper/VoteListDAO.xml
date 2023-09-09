@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.final1.logic.IVoteListDAO">
+	
+	<!-- ID_NUM 으로 MEM_JOIN_NUM 조회 -->
+	<select id="mjSelect" resultType="java.lang.String">
+		SELECT MEM_JOIN_NUM
+		FROM MEM_JOIN
+		WHERE ID_NUM = #{id_num} AND ROOM_NUM = #{room_num}
+	</select>
+	
+	<!-- 해당 방의 방장 mem_join_num 조회 -->
+	<select id="voteBoss" resultType="java.lang.String">
+		SELECT MEM_JOIN_NUM
+		FROM MEM_JOIN
+		WHERE ROOM_NUM = #{room_num} AND ID_NUM = (SELECT ID_NUM
+		                                            FROM BUILD_ROOM
+		                                            WHERE ROOM_NUM = #{room_num})
+	</select>
+	
+	
+	<!-- 투표 제목 리스트 조회문 -->
+	<select id="voteTitle" resultType="com.final1.logic.VotesDTO">
+		SELECT *
+		FROM  VOTE
+		WHERE ROOM_NUM = #{room_num}
+		ORDER BY VOTE_NUM
+	</select>
+	
+	<!-- 투표 리스트 조회문 -->
+	<select id="votelist" resultType="com.final1.logic.VotesDTO">
+		SELECT *
+		FROM VOTE
+		WHERE ROOM_NUM = #{room_num} AND VOTE_NUM = #{vote_num}
+	</select>
+	
+	<!-- 투표 정보  -->
+	<!-- 복수선택, 익명투표, 투표 기한 남은 일수, 투표 제목 -->
+	<select id="voteInfo" resultType="com.final1.logic.VotesDTO">
+		SELECT V.TITLE AS TITLE, TRUNC(END_DATE-SYSDATE) AS DAY, vs.content AS VOTE_SELECT_NUM, vn.content AS VOTE_NAME_NUM
+		 FROM VOTE V JOIN VOTE_SELECT VS
+		    ON V.VOTE_SELECT_NUM =  VS.VOTE_SELECT_NUM
+		    JOIN VOTE_NAME VN
+		    ON VN.VOTE_NAME_NUM = V.VOTE_NAME_NUM
+		WHERE VOTE_NUM =  #{vote_num}
+	</select>
+	
+	<!-- 투표 항목, 투표한 사람, 투표한 날짜, 항목에 투표한 사람 수 -->
+	<select id="voteContent" resultType="com.final1.logic.VotesDTO">
+		SELECT A.VOTE_NUM AS VOTE_NUM, A.VOTE_CATEGORY_NUM AS VOTE_CATEGORY_NUM, A.CONTENT AS CONTENT, NVL(count(MEM_VOTE_NUM),0) AS CATE_PEOPLE
+		FROM
+		(
+		    SELECT V.VOTE_NUM, VC.VOTE_CATEGORY_NUM,VC.CONTENT
+		    FROM VOTE V JOIN VOTE_CATEGORY VC
+		    ON VC.VOTE_NUM = V.VOTE_NUM
+		    WHERE V.VOTE_NUM = #{vote_num}
+		    ORDER BY 2
+		) A
+		LEFT JOIN
+		MEM_VOTE MV
+		ON A.VOTE_CATEGORY_NUM = MV.VOTE_CATEGORY_NUM
+		GROUP BY A.VOTE_NUM, A.VOTE_CATEGORY_NUM, A.CONTENT
+		ORDER BY 2
+	</select>
+	
+	
+	<!--해당 투표항목에 투표한 사람 닉네임 조회 -->
+	<select id="nikSelect" resultType="com.final1.logic.VotesDTO">
+		SELECT MV.VOTE_CATEGORY_NUM AS VOTE_CATEGORY_NUM, M.NIKNAME AS NIKNAME
+		FROM MEM_VOTE MV JOIN VOTE_CATEGORY VC
+		ON MV.VOTE_CATEGORY_NUM = VC.VOTE_CATEGORY_NUM
+		JOIN MEM_JOIN MJ 
+		ON MJ.MEM_JOIN_NUM = MV.MEM_JOIN_NUM
+		JOIN MEMBER M 
+		ON MJ.ID_NUM = M.ID_NUM
+		WHERE VC.VOTE_NUM = #{vote_num}
+	</select>
+	
+	
+	<!-- 해당 방에 투표한 사람인지 확인하기  -->
+	<select id="memVoteWho" resultType="java.lang.Integer">
+		SELECT COUNT(MV.MEM_JOIN_NUM) AS VOTE_COUNT_CHECK
+		FROM VOTE_CATEGORY VC RIGHT JOIN MEM_VOTE MV
+		ON VC.VOTE_CATEGORY_NUM = MV.VOTE_CATEGORY_NUM 
+		JOIN MEM_JOIN MJ 
+		ON MJ.MEM_JOIN_NUM = MV.MEM_JOIN_NUM 
+		WHERE VOTE_NUM = #{vote_num} AND MJ.ID_NUM = #{id_num}
+	</select>
+	
+	
+	<!-- 해당 투표항목에 투표하면 insert 되는 쿼리문  -->
+	<insert id="voteInsert" parameterType="java.lang.String">
+		INSERT INTO MEM_VOTE(MEM_VOTE_NUM, VOTE_CATEGORY_NUM, MEM_JOIN_NUM, VOTE_DATE)
+		VALUES(CONCAT('MEM-VOTE-', LPAD(MEM_VOTE_SEQ.NEXTVAL, 5, 0)), #{vote_category_num}, #{mem_join_num}, SYSDATE)
+	</insert>
+	
+	
+	<!-- 투표 다시하기 클릭 했을 때 투표한 사람이 투표한 내역 삭제 -->
+	<delete id="voteDelete">
+		DELETE
+		FROM MEM_VOTE
+		WHERE MEM_JOIN_NUM = #{mem_join_num} 
+		AND VOTE_CATEGORY_NUM IN (SELECT VOTE_CATEGORY_NUM 
+		                          FROM VOTE_CATEGORY 
+		                          WHERE VOTE_NUM = #{vote_num})
+	</delete>
+	
+	
+	<!-- 투표 종료하기 버튼을 클릭했을 때 투표 종료일 업데이트 하기  -->
+	<update id="voteFinish">
+		UPDATE VOTE 
+		SET END_DATE = TO_CHAR(TO_DATE(SYSDATE, 'YYYY-MM-DD')- INTERVAL'1'DAY,'YYYY-MM-DD')
+		WHERE VOTE_NUM = #{vote_num}
+	</update>
+	
+	
+	<!-- 투표 가능한 날짜 조회 -->
+	<select id="voteDate_possible" resultType="com.final1.logic.VotesDTO">
+		<!-- SELECT TO_CHAR(TO_DATE(SYSDATE, 'YYYY-MM-DD')) AS V_START_DATE, TO_CHAR(TO_DATE(SYSDATE, 'YYYY-MM-DD') + TRUNC(TRIP_START_DATE - SYSDATE)) AS V_END_DATE
+		FROM BUILD_ROOM
+		WHERE ROOM_NUM = #{room_num} AND TRIP_START_DATE >= TO_CHAR(TO_DATE(SYSDATE, 'YYYY-MM-DD'))	 -->
+		SELECT TO_char(SYSDATE, 'YYYY-MM-DD') AS V_START_DATE, REPLACE(TO_CHAR(TO_DATE(SYSDATE, 'YYYY-MM-DD') + TRUNC(TRIP_START_DATE - SYSDATE),'YYYY-MM-DD'),SUBSTR(TO_CHAR(TO_DATE(SYSDATE, 'YYYY-MM-DD') + TRUNC(TRIP_START_DATE - SYSDATE),'YYYY-MM-DD'),1,2),'20') AS V_END_DATE
+		FROM BUILD_ROOM
+		WHERE ROOM_NUM = #{room_num} AND  <![CDATA[TRIP_START_DATE >= TO_CHAR(TO_DATE(SYSDATE, 'YYYY-MM-DD'))]]>
+	</select>
+	
+	
+	<!-- 투표 제목 데이터 삽입  -->
+	<insert id="voteInsert_Title">
+		INSERT INTO VOTE(VOTE_NUM, ROOM_NUM, TITLE, START_DATE, END_DATE, VOTE_SELECT_NUM, VOTE_NAME_NUM)
+		VALUES(CONCAT('VOTE-',LPAD(VOTE_SEQ.NEXTVAL,5,0)),#{room_num},#{title},SYSDATE,TO_DATE(#{end_date}),#{vote_select_num},#{vote_name_num})
+	</insert>
+	
+	<!-- 투표 항목 데이터 삽입 -->
+	<insert id="voteInsert_Content">
+		INSERT INTO VOTE_CATEGORY(VOTE_CATEGORY_NUM, VOTE_NUM, CONTENT) VALUES(CONCAT('VOTE-CTG-',LPAD(VOTE_CATEGORY_SEQ.NEXTVAL,5,0)),#{vote_num},#{content})
+	</insert>
+	
+	<!-- 투표 제목 번호 얻어오기 -->
+	<select id="lastVoteNum" resultType="java.lang.String">
+		SELECT VOTE_NUM
+		FROM VOTE
+		WHERE ROOM_NUM = #{room_num} AND ROWNUM = 1
+		ORDER BY VOTE_NUM DESC
+	</select>	
+	
+	
+	<!-- 투표를 삭제하는 기능  -->
+	<delete id="voteDeleteFinally" parameterType="java.lang.String">
+		DELETE
+		FROM VOTE
+		WHERE ROOM_NUM = #{room_num} AND VOTE_NUM = #{vote_num}
+	</delete>
+</mapper>
