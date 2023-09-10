@@ -98,7 +98,6 @@
 	
 	
 	
-	
 	<!-- 전체 검색  -->
 	<select id="searchList" resultType="com.final1.logic.RoomListDTO">
 	SELECT RLV.*, T.TOTAL,T.PW_CODE, T.ONGOING, T.BOOKMARK, ROWNUM AS NUM
@@ -131,8 +130,8 @@
 		                                                        WHERE ID_NUM = #{id_num}))
 		                       THEN 'YES' ELSE 'NO' END AS BOOKMARK
 		              <choose>
-		              	<when test="dto.plan_num== null || dto.plan_num== 4">
-			             , CASE WHEN PLAN_NUM IN (0) THEN 0                            
+		              	<when test="dto.plan_num == null">
+			             , CASE WHEN PLAN_NUM IN (0) THEN 1                            
 			               ELSE 0 END AS PLAN
 		              	</when>
 		              	<otherwise>
@@ -141,8 +140,8 @@
 		              	</otherwise>
 		              </choose>
 		              <choose>
-		              	<when test="dto.money_option_num == null || dto.money_option_num ==4">
-			             , CASE WHEN MONEY_OPTION_NUM IN (0) THEN 0
+		              	<when test="dto.money_option_num == null">
+			             , CASE WHEN MONEY_OPTION_NUM IN (0) THEN 1 
 			               ELSE 0 END AS MONEY_OPTION
 		              	</when>
 		              	<otherwise>
@@ -151,8 +150,8 @@
 		              	</otherwise>
 		              </choose>
 		              <choose>
-		              	<when test="dto.stay_type_num == null || dto.stay_type_num ==5">
-			             , CASE WHEN STAY_TYPE_NUM IN (0) THEN 0
+		              	<when test="dto.stay_type_num == null">
+			             , CASE WHEN STAY_TYPE_NUM IN (0) THEN 1 
 			               ELSE 0 END AS STAY_TYPE
 		              	</when>
 		              	<otherwise>
@@ -161,8 +160,8 @@
 		              	</otherwise>
 		              </choose>
 		              <choose>
-		              	<when test="dto.traffic_num == null || dto.traffic_num ==4">
-			             , CASE WHEN TRAFFIC_NUM IN (0) THEN 0 
+		              	<when test="dto.traffic_num == null">
+			             , CASE WHEN TRAFFIC_NUM IN (0) THEN 1 
 			               ELSE 0 END AS TRAFFIC
 		              	</when>
 		              	<otherwise>
@@ -171,8 +170,8 @@
 		              	</otherwise>
 		              </choose>
 		              <choose>
-		              	<when test="dto.cycle_num == null || dto.cycle_num ==3">
-			             , CASE WHEN CYCLE_NUM IN (0) THEN 0
+		              	<when test="dto.cycle_num == null">
+			             , CASE WHEN CYCLE_NUM IN (0) THEN 1 
 			               ELSE 0 END AS CYCLE
 		              	</when>
 		              	<otherwise>
@@ -181,8 +180,8 @@
 		              	</otherwise>
 		              </choose>
 		              <choose>
-		              	<when test="dto.pace_num == null || dto.pace_num ==3">
-			             , CASE WHEN PACE_NUM IN (0) THEN 0
+		              	<when test="dto.pace_num == null">
+			             , CASE WHEN PACE_NUM IN (0) THEN 1 
 			               ELSE 0 END AS PACE       
 		              	</when>
 		              	<otherwise>
@@ -191,8 +190,8 @@
 		              	</otherwise>
 		              </choose>
 		              <choose>
-		              	<when test="dto.desti_type_num == null || dto.pace_num ==5">
-			             , CASE WHEN DESTI_TYPE_NUM IN (0) THEN 0
+		              	<when test="dto.desti_type_num == null">
+			             , CASE WHEN DESTI_TYPE_NUM IN (0) THEN 1 
 			               ELSE 0 END AS DESTI_TYPE
 		              	</when>
 		              	<otherwise>
@@ -201,8 +200,8 @@
 		              	</otherwise>
 		              </choose>
 		              <choose>
-		              	<when test="dto.to_do_num == null || dto.to_do_num ==7">
-			             , CASE WHEN TO_DO_NUM IN (0) THEN 0
+		              	<when test="dto.to_do_num == null">
+			             , CASE WHEN TO_DO_NUM IN (0) THEN 1 
 			               ELSE 0 END AS TO_DO
 		              	</when>
 		              	<otherwise>
@@ -211,8 +210,8 @@
 		              	</otherwise>
 		              </choose>
 		              <choose>
-		              	<when test="dto.to_see_num == null || dto.to_see_num ==5">
-			             , CASE WHEN TO_SEE_NUM IN (0) THEN 0
+		              	<when test="dto.to_see_num == null">
+			             , CASE WHEN TO_SEE_NUM IN (0) THEN 1 
 			               ELSE 0 END AS TO_SEE
 		              	</when>
 		              	<otherwise>
@@ -221,8 +220,8 @@
 		              	</otherwise>
 		              </choose>
 		              <choose>
-		              	<when test="dto.food_num == null || dto.food_num ==5">
-			             , CASE WHEN FOOD_NUM IN (0) THEN 0
+		              	<when test="dto.food_num == null">
+			             , CASE WHEN FOOD_NUM IN (0) THEN 1 
 			               ELSE 0 END AS FOOD
 		              	</when>
 		              	<otherwise>
@@ -231,8 +230,8 @@
 		              	</otherwise>
 		              </choose>
 		              <choose>
-		              	<when test="dto.meal_count_num == null || dto.meal_count_num ==4">
-			             , CASE WHEN MEAL_COUNT_NUM IN (0) THEN 0
+		              	<when test="dto.meal_count_num == null">
+			             , CASE WHEN MEAL_COUNT_NUM IN (0) THEN 1 
 			               ELSE 0 END AS MEAL_COUNT
 		              	</when>
 		              	<otherwise>
@@ -241,8 +240,8 @@
 		              	</otherwise>
 		              </choose>
 		              <choose>
-		              	<when test="dto.supply_num == null || dto.supply_num ==4">
-			             , CASE WHEN SUPPLY_NUM IN (0) THEN 0
+		              	<when test="dto.supply_num == null">
+			             , CASE WHEN SUPPLY_NUM IN (0) THEN 1 
 			               ELSE 0 END AS SUPPLY
 		              	</when>
 		              	<otherwise>
@@ -251,8 +250,8 @@
 		              	</otherwise>
 		              </choose>
 		              <choose>
-		              	<when test="dto.photo_num == null || dto.photo_num ==4">
-			             , CASE WHEN PHOTO_NUM IN (0) THEN 0 
+		              	<when test="dto.photo_num == null">
+			             , CASE WHEN PHOTO_NUM IN (0) THEN 1 
 			               ELSE 0 END AS PHOTO
 		              	</when>
 		              	<otherwise>
@@ -311,11 +310,11 @@
 		WHERE RLV.ROOM_NUM = T.ROOM_NUM
       <choose>
          <when test="sort == 2">
-            ORDER BY T.TOTAL DESC, RLV.TRIP_START_DATE
+               ORDER BY RLV.TRIP_START_DATE
          </when>
          <otherwise>
-            ORDER BY T.TOTAL DESC, RLV.ROOM_BUILD_DATE DESC   
-         </otherwise>
+            ORDER BY RLV.ROOM_BUILD_DATE DESC   
+             </otherwise>
       </choose>
 	</select>
 	
@@ -639,5 +638,11 @@
 		  AND ID_NUM = (SELECT ID_NUM FROM MEM_REGI WHERE ID=#{id})
 	 </select>
 	
+	<!-- 방 신고 추가 -->
+	<insert id="RoomReport">
+		INSERT INTO ROOM_REPORT_RECEIPT(ROOM_REPORT_RECEIPT_NUM, ROOM_NUM, REPORT_REASON_NUM, ID_NUM, CONTENT, REPORT_DATE, ALARM_CHECK_DATE) 
+		VALUES(CONCAT('R-R-RC-',LPAD(ROOM_REPORT_RECEIPT_SEQ.NEXTVAL,5,0)),#{room_num},#{report_reason_num}
+			  ,#{id_num},#{reason},SYSDATE, NULL)
+	</insert>
 	
 </mapper>

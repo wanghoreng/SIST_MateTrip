@@ -82,5 +82,8 @@ public interface IRoomListDAO
 	// 개설 가능 일자
 	public String makeStart(String id);
 	
+	// 방 신고 추가
+	public int RoomReport(RoomListDTO dto);
+	
 	
 }

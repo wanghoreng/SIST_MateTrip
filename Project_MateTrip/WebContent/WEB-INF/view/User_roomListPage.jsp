@@ -286,6 +286,20 @@
 		width: 1000px;
 	}
 	*/
+	
+	.reportRoom
+	{
+		font-size: 23px;
+		color: red;
+	}
+	
+	.custom-position 
+	{
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+  }
+	
 </style>
 
 <script type="text/javascript">
@@ -325,8 +339,6 @@
 				$(location).attr("href", "room_make.action");
 			}
 		});
-		
-		
 		
 		
 	});
@@ -591,6 +603,10 @@
 	    					console.log(e.responseText); // 소량의 데이터	
 	    				}			
 	    		    });
+		
+		// 추가
+		// 북마크 클릭 시 둘러보기 페이지로 넘어가지는거 방지
+		event.stopPropagation();
 	}
 	
 	
@@ -613,29 +629,42 @@
 			
 			
 			
-			$(".btn-close").on("click",function(){
+			$(".btn-close").on("click",function()
+			{
 				$("#modal"+roomNum).hide();
 				$("#backdrop").css("display", "none");
-				/* 
-				$("#modal"+roomNum).on('show.bs.modal', function () 
-			   	{
-					
-			     	$('#backdrop').hide();
-			     	
-			   	});
-				 */
 			});
 			
-			/* 
-			$("#modal"+roomNum).on('hide.bs.modal', function () 
-		   	{
-				alert("dd");
-		     	$('#backdrop').hide();
-		   	});
-	
-			 */
+		});
 		
+		// 추가
+		$(".reportRoom").click(function(event) 
+		{
+  			event.stopPropagation(); // 이벤트 전파 중지 (부모 요소로의 이벤트 전파 방지)
+
+  			// 클릭된 요소에 가장 가까운 '.custom-position' 요소 내에서 '.reportNickName' 클래스를 가진 <input> 요소를 찾습니다.
+  			var reportNickNameValue = $(this).closest('.custom-position').find('.reportNickName').val();
 			
+  			var reportRoomNumValue = $(this).closest('.custom-position').find('.reportRoomNum').val();
+  			
+  			var str = " 님을 신고하시겠습니까?";
+  			$("#test").html(reportNickNameValue + str);
+  			
+  			$(".hiddenRoomNum").val(reportRoomNumValue);
+  			
+		});
+		
+		// 추가
+		$("#modalReport").click(function()
+		{
+			if ($("#report_reason_num").val() == '0')
+			{
+				alert("신고 사유를 선택해주세요.");
+			}
+			else if (confirm("신고하시겠습니까?"))
+			{
+				$("#myForm").submit();
+			}
 		});
 		
 		// 툴팁 
@@ -2330,11 +2359,19 @@
 							</button>
 						  </div>
 					    </div>
+					    
+					    <!-- 추가 -->
+					    <!-- 신고버튼 -->
+					    <div class="position-absolute custom-position">
+							<i class="bi bi-exclamation-circle-fill reportRoom" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"></i>
+							<input type="hidden" class="reportNickName" value="${roomDTO.nikname }">
+							<input type="hidden" class="reportRoomNum" value="${roomDTO.room_num }">
+						</div>
 					  </div>
-						
+					  
 					  <!-- 비회원 : confirm 창... 룸리스트 클릭시  => 스타일 다 보여짐
 					  회원 : prompt 창.. 비공개 공개 상관 x / 세션 아이디 들어감 --> 
-					  <!-- 모달창 --><!--id="${roomDTO.room_num}  -->
+					  <!-- 여행스타일 모달창 --><!--id="${roomDTO.room_num}  -->
 						<div class="modal" id="modal${roomDTO.room_num}" tabindex="-1" role="dialog"> <!-- id="myModal" -->
 						  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 						    <div class="modal-content">
@@ -2502,7 +2539,7 @@
 				
 			</div>
 		</div>
-
+		
 <!-- 모달창 -->
 <div class="modal" id="myModal" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
@@ -2545,7 +2582,51 @@
 </div>
 
 
-	</main>
+</main>
+
+<!-- 추가 -->
+<!-- 신고 모달창 -->
+ <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+	<div class="modal-content">
+     		<div class="modal-header">
+       		<h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+       		<span id="test"></span>
+       		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+     		</div>
+     		<div class="modal-body">
+     			<div>
+     				<br><span style="color: red; font-size: small;">허위 신고의 경우 신고자에게 제재가 가해질 수 있습니다.</span>
+    			</div>
+      		<form action="roomreport.action" method="post" id="myForm">
+      			<div class="row">
+				<div class="col-md-3">
+					<br><span class="sinGoTxt align-middle">신고사유</span>
+				</div>
+				<div class="col-md-9">
+					<br><select class="form-select" aria-label="Default select example" style="width: 350px" id="report_reason_num" name="report_reason_num">
+						<option value="0" selected>===========선택===========</option>
+						<option value="1">스팸, 홍보, 도배</option>
+						<option value="2">욕설 및 선정적인 내용</option>
+						<option value="3">도용, 명예훼손 및 비방, 초상권 및 저작권 침해</option>
+						<option value="4">범죄</option>
+					</select>
+				</div>
+			</div>
+			<div class="mb-3">
+				<br><span style="float: left">신고상세내용</span>
+				<br><textarea class="form-control" rows="3" cols="10" id="reason" name="reason"></textarea>
+			</div>
+			<input type="hidden" class="hiddenRoomNum" name="room_num">
+        		</form>
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+        		<button type="button" class="btn btn-danger" id="modalReport" name="modalReport">신고</button>
+      		</div>
+    	</div>
+  	</div>
+</div>
 	
 
 <!-- 물음표 구성 및 top 구성-->

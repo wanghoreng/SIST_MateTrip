@@ -45,7 +45,12 @@
 		
 		$("#modalReport").click(function()
 		{
-			if (confirm("신고하시겠습니까?"))
+			// 추가
+			if ($("#report_reason_num").val() == '0')
+			{
+				alert("신고 사유를 선택해주세요.");
+			}
+			else if (confirm("신고하시겠습니까?"))
 			{
 				$("#myForm").submit();
 			}
@@ -174,18 +179,23 @@
 						<p style="color: white;">${list.writeTime }</p>
 					</div>
 					<div class="contentDelete">
-						<!-- 입장퇴장 피드가 아니면서 로그인한 계정이 참여중인 멤버일 때 -->
-						<c:if test="${list.nickName == feedDto.nickName && list.count== '0' && feedCount == 1}">
+						<!-- 입장퇴장 피드가 아니면서 로그인한 계정이 참여중인 멤버일 때 --> <!-- not flag 추가 -->
+						<c:if test="${list.nickName == feedDto.nickName && list.count== '0' && feedCount == 1 && not flag}">
 							<button type="button" class="btn btn-success btnDel" id="btnDel" name="btnDel" value="${list.feedNum }">삭제</button>
 						</c:if>
 						
-						<!-- 입장퇴장 피드가 아니면서 로그인한 계정이 참여중이 아닌 멤버일 때 -->
-						<c:if test="${list.nickName == feedDto.nickName && list.count== '0' && feedCount == 0}">
+						<!-- 입장퇴장 피드가 아니면서 로그인한 계정이 참여중이 아닌 멤버일 때 --> <!-- not flag 추가 -->
+						<c:if test="${list.nickName == feedDto.nickName && list.count== '0' && feedCount == 0 && not flag}">
 							<button type="button" disabled="disabled" class="btn btn-success btnDel" id="btnDel" name="btnDel" value="${list.feedNum }">삭제</button>
 						</c:if>
 						
-						<!-- 입장퇴장 피드이면서 참여중이 아닌 멤버일 때 -->
-						<c:if test="${list.nickName == feedDto.nickName && list.count== '1'}">
+						<!-- 입장퇴장 피드이면서 참여중이 아닌 멤버일 때 --> <!-- not flag 추가 -->
+						<c:if test="${list.nickName == feedDto.nickName && list.count== '1' && not flag}">
+							<button type="button" disabled="disabled" class="btn btn-success btnDel" id="btnDel" name="btnDel" value="${list.feedNum }">삭제</button>
+						</c:if>
+						
+						<!-- 추가 -->
+						<c:if test="${list.nickName == feedDto.nickName && flag}">
 							<button type="button" disabled="disabled" class="btn btn-success btnDel" id="btnDel" name="btnDel" value="${list.feedNum }">삭제</button>
 						</c:if>
 						
@@ -266,7 +276,7 @@
 						</div>
 						<div class="col-md-9">
 							<br><select class="form-select" aria-label="Default select example" style="width: 350px" id="report_reason_num" name="report_reason_num">
-								<option selected>===========선택===========</option>
+								<option value="0" selected>===========선택===========</option> <!-- value 추가 -->
 								<option value="1">스팸, 홍보, 도배</option>
 								<option value="2">욕설 및 선정적인 내용</option>
 								<option value="3">도용, 명예훼손 및 비방, 초상권 및 저작권 침해</option>
