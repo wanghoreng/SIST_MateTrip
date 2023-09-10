@@ -18,8 +18,27 @@ public class RoomListDTO
 	String desti_type, to_do, to_see, food, meal_count, supply, photo, region;
 	String plan_onoff, gender_limit, age_limit, trip_start, trip_end;
 	
+	// 추가
+	String reason, report_reason_num;
 	
 	
+	
+	public String getReport_reason_num()
+	{
+		return report_reason_num;
+	}
+	public void setReport_reason_num(String report_reason_num)
+	{
+		this.report_reason_num = report_reason_num;
+	}
+	public String getReason()
+	{
+		return reason;
+	}
+	public void setReason(String reason)
+	{
+		this.reason = reason;
+	}
 	public String getPw()
 	{
 		return pw;

@@ -298,4 +298,23 @@ public class RoomListCrt
       return result;
    }
    
+   // 방 제목 신고 추가
+   @RequestMapping(value = "roomreport.action")
+   public String ReportRoom(RoomListDTO dto, HttpSession session)
+   {
+	   String result = "";
+	   
+	   IRoomListDAO dao = sqlSession.getMapper(IRoomListDAO.class);
+	   
+	   String id = (String)session.getAttribute("id");
+	   dto.setId_num(dao.selectIdNum(id));
+	   
+	   dao.RoomReport(dto);
+	   
+	   
+	   result = "redirect:roomlist.action";
+	   
+	   return result;
+   }
+   
 }
