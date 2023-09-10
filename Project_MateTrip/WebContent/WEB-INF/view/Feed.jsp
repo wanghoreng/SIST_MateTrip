@@ -195,7 +195,7 @@
 						</c:if>
 						
 						<!-- 추가 -->
-						<c:if test="${flag}">
+						<c:if test="${list.nickName == feedDto.nickName && flag}">
 							<button type="button" disabled="disabled" class="btn btn-success btnDel" id="btnDel" name="btnDel" value="${list.feedNum }">삭제</button>
 						</c:if>
 						

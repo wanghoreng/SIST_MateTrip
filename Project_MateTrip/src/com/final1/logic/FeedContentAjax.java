@@ -67,13 +67,17 @@ public class FeedContentAjax
 			sb.append("			</div>");
 			sb.append("			<div class='contentDelete'>");
 			
-			if (dto.getId().equals(id) && dto.getCount().equals("0"))
+			if (dto.getId().equals(id) && dto.getCount().equals("0") && !flag) // listCount 가 없는 이유 : 참여중이 아니면 피드 작성이 불가하기 때문에 ajax가 넘어갈 일이 없음
 			{
 				sb.append("<button type='button' class='btn btn-success btnDel' id='btnDel' name='btnDel' value='" + dto.getFeedNum() + "'>삭제</button>");
 			}
-			else if (dto.getId().equals(id))
+			else if (dto.getId().equals(id) && !flag)
 			{
 				sb.append("<button type='button' class='btn btn-success btnDel' id='btnDel' disabled=\"disabled\" name='btnDel' value='" + dto.getFeedNum() + "'>삭제</button>");
+			}
+			else if (dto.getId().equals(id) && flag)
+			{
+				sb.append("<button type=\"button\" disabled=\"disabled\" class=\"btn btn-success btnDel\" id=\"btnDel\" name=\"btnDel\">삭제</button>");
 			}
 			else if (!dto.getId().equals(id) && dto.getCount().contentEquals("0"))
 			{
