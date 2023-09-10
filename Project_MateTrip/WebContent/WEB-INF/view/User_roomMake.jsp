@@ -47,15 +47,39 @@
 	   
 	}
 	
-	
-	// 폼 제출하기 전 지역선택했는지 확인하는 유효성 검사 함수
-	function region_submit()
+    function region_submit()
 	{
+    	$("#region").removeClass("is-invalid");
+      	$("#title").removeClass("is-invalid");
+      	$("#search_endDate").removeClass("is-invalid");
+      	$("#plan").removeClass("is-invalid");
+      	$("#memberCount").removeClass("is-invalid");
+      	$("#gender").removeClass("is-invalid");
+      	$("#age").removeClass("is-invalid");
+      	$("#budget").removeClass("is-invalid");
+      	
+      	
 	      //값 비어있으면
-	      if($("#region").val() == "")
+	      if($("#region").val() == "" || $("#title").val() == ""|| $("#search_endDate").val() == ""|| $("#plan").val() == ""
+	    	  || $("#memberCount").val() == ""|| $("#gender").val() == ""|| $("#age").val() == ""|| $("#budget").val() == "")
 	      {
 	          // is-invalid 클래스를 붙여줘서 빨간 경고문구 붙여준다
-	          $("#region").addClass("is-invalid");
+	          if($("#region").val() == "")
+	          	$("#region").addClass("is-invalid");
+	          if($("#title").val() == "")
+		          	$("#title").addClass("is-invalid");
+	          if($("#search_endDate").val() == "")
+		          	$("#search_endDate").addClass("is-invalid");
+	          if($("#plan").val() == "")
+		          	$("#plan").addClass("is-invalid");
+	          if($("#memberCount").val() == "")
+		          	$("#memberCount").addClass("is-invalid");
+	          if($("#gender").val() == "")
+		          	$("#gender").addClass("is-invalid");
+	          if($("#age").val() == "")
+		          	$("#age").addClass("is-invalid");
+	          if($("#budget").val() == "")
+		          	$("#budget").addClass("is-invalid");
 	       // 폼 제출을 반환(제출 안되게 리턴)
 	          return;
 	      }
@@ -63,42 +87,42 @@
 	    if ($("#search_startDate").val() > $("#search_endDate").val())
 		{
 			alert("날짜 형식이 올바르지 않습니다.");
+			$("#search_endDate").addClass("is-invalid");
 			return;
 		}
 	    
-	 // 추가 ★★★★★
-        if($('input[name=OpenCloseRadio]:checked').val()=="2" && $("#pwd").val()=="")
-       {
-           alert("비밀번호 입력 바랍니다.");
-           event.preventDefault();
-           return;
-       }
-	      
-	      var params = "startDate=" + $("#search_startDate").val()+"&endDate="+$("#search_endDate").val();
-	      
-			$.ajax(
-			{
-				type:"GET"                        
-				, url:"dateCheck.action"            
-				, data:params
-				, success:function(args)
-				{
-					if (parseInt(args) >= 1)
-					{
-						alert("참여중인 여행과 기간이 겹칩니다.");
-						return;
-					}
-					else
-					{
-						$("#myForm").submit();
-					}
-				}
-				, error:function(e)
-				{
-			      	alert(e.responseText);
-				}
-			});
-	      
+	 	// 추가 ★★★★★
+	     if($('input[name=OpenCloseRadio]:checked').val()=="2" && $("#pwd").val()=="")
+	    {
+	        alert("비밀번호 입력 바랍니다.");
+	        $("#pwd").focus();
+	        return;
+	    }	
+	 
+     	   var params = "startDate=" + $("#search_startDate").val()+"&endDate="+$("#search_endDate").val();
+     	      
+     			$.ajax(
+     			{
+     				type:"GET"                        
+     				, url:"dateCheck.action"            
+     				, data:params
+     				, success:function(args)
+     				{
+     					if (parseInt(args) >= 1)
+     					{
+     						alert("참여중인 여행과 기간이 겹칩니다.");
+     					}
+     					else
+     					{
+     						$("#myForm").submit();
+     					}
+     				}
+     				, error:function(e)
+     				{
+     			      	alert(e.responseText);
+     				}
+     			});
+     			
 	}
 	
 	// 지역 입력하지 않은 채 검색 버튼 누를경우 (ajax 로 요청보내기전 확인하는 함수) 
@@ -143,10 +167,20 @@
 		startDateInput.setAttribute("min", dateOffset.toISOString().split('T')[0]);
 		
 		
+		// 추가 ★
+		
+		// 여행 시작일 최대 날짜 제한 (현재 날짜로부터 89일까지)
+		var ninetyDaysLater = new Date(today);
+		ninetyDaysLater.setDate(today.getDate() + 89);
+		var maxDateOffset = new Date(ninetyDaysLater.getTime() - offset);
+		
+		startDateInput.setAttribute("max", maxDateOffset.toISOString().split('T')[0]);
+		
 		// 여행 시작일 설정
 		var startDateInput = document.getElementById("search_startDate");
 		var today = new Date();
 		startDateInput.valueAsDate = dateOffset;
+		
 		
 
 		// 여행 종료일 설정
@@ -154,7 +188,7 @@
 		endDateInput.setAttribute("min", startDateInput.value);
 
 		var maxEndDate = new Date(startDateInput.value);
-		maxEndDate.setDate(maxEndDate.getDate() + 30);
+		maxEndDate.setDate(maxEndDate.getDate() + 29);
 
 		endDateInput.setAttribute("max", maxEndDate.toISOString().split('T')[0]);
 		
@@ -165,7 +199,7 @@
 		    newMinEndDate.setDate(newMinEndDate.getDate());
 		    
 		    var newMaxEndDate = new Date(startDateInput.value);
-		    newMaxEndDate.setDate(newMinEndDate.getDate() + 30);
+		    newMaxEndDate.setDate(newMinEndDate.getDate() + 29);
 		    endDateInput.setAttribute("min", newMinEndDate.toISOString().split('T')[0]);
 		    endDateInput.setAttribute("max", newMaxEndDate.toISOString().split('T')[0]);
 		});
@@ -513,7 +547,82 @@
 			
 		});
 	 
+	    $("#title").keyup(function() {
+	    	$("#title").removeClass("is-invalid");
+			$("#title").addClass("is-valid");
+		});
 
+	    $("#search_endDate").change(function() {
+	    	if($("#search_endDate").val() != "")
+	    	{
+		    	$("#search_endDate").removeClass("is-invalid");
+				$("#search_endDate").addClass("is-valid");
+	    	}
+	    	else
+	    	{
+	    		$("#search_endDate").addClass("is-invalid");
+	    	}
+		});
+	    
+	    $("#plan").change(function() {
+	    	if($("#plan").val() != "")
+	    	{
+		    	$("#plan").removeClass("is-invalid");
+				$("#plan").addClass("is-valid");
+	    	}
+	    	else
+	    	{
+	    		$("#plan").addClass("is-invalid");
+	    	}
+		});
+	    
+	    $("#memberCount").change(function() {
+	    	if($("#memberCount").val() != "")
+	    	{
+		    	$("#memberCount").removeClass("is-invalid");
+				$("#memberCount").addClass("is-valid");
+	    	}
+	    	else
+	    	{
+	    		$("#memberCount").addClass("is-invalid");
+	    	}
+		});
+	    
+	    $("#gender").change(function() {
+	    	if($("#gender").val() != "")
+	    	{
+		    	$("#gender").removeClass("is-invalid");
+				$("#gender").addClass("is-valid");
+	    	}
+	    	else
+	    	{
+	    		$("#gender").addClass("is-invalid");
+	    	}
+		});
+	    
+	    $("#age").change(function() {
+	    	if($("#age").val() != "")
+	    	{
+		    	$("#age").removeClass("is-invalid");
+				$("#age").addClass("is-valid");
+	    	}
+	    	else
+	    	{
+	    		$("#age").addClass("is-invalid");
+	    	}
+		});
+	    
+	    $("#budget").change(function() {
+	    	if($("#budget").val() != "")
+	    	{
+		    	$("#budget").removeClass("is-invalid");
+				$("#budget").addClass("is-valid");
+	    	}
+	    	else
+	    	{
+	    		$("#budget").addClass("is-invalid");
+	    	}
+		});
 		
 	});
 	
@@ -576,6 +685,7 @@
       <div class="input-form col-md-12 mx-auto">
         <h4 class="mb-3">여행 계획 방 만들기</h4>
         <form action="buildroom.action" method="get" id="myForm" class="validation-form" novalidate>
+        <input type="hidden" id="check" name="check" value="false">
           <div class="row">
             <div class="mb-3">
               <label for="title">제목</label>
@@ -660,7 +770,7 @@
            <div class="col-md-6">
            여행 종료일  
            <input type="date" class="form-control shadow-sm" data-toggle="tooltip" title="여행종료일" 
-			           id="search_endDate" aria-required="true" name="trip_end_date"
+			           id="search_endDate" aria-required="true" name="trip_end_date" required
 			           value=""  style="width: 200px; height: 40px;">
          </div>            
            </div>   
@@ -1253,11 +1363,11 @@
 
       Array.prototype.filter.call(forms, (form) => {
         form.addEventListener('submit', function (event) {
-          if (form.checkValidity() === false) {
+          if (form.checkValidity() === false ) {
             event.preventDefault();
             event.stopPropagation();
           }
-
+   			
           form.classList.add('was-validated');
         }, false);
       });
