@@ -872,6 +872,13 @@
 	 	font-size: 19px;
 	 	font-weight: bold;
 	 }
+	 
+	 
+	 #deleteBtnStyle {
+	 	padding: 1px;
+	 	margin: 3px;
+	 }
+	 
 </style>
 
 <body>
@@ -1447,16 +1454,22 @@
 					<!-- 투표 제목리스트 생성되는 공간 --> 
 					<c:set var="i" value="1"/>
 					<c:forEach var="title" items="${titleList }">
-						<a href='#' id='voteTitleStyle' 
-						onclick= 'win_open("voteInfo_content.action?vote_num=${title.vote_num}&room_num=${title.room_num }")'> 
-						 ${i }.${title.title }</a>
+					<a href='#' id='voteTitleStyle' 
+					onclick= 'win_open("voteInfo_content.action?vote_num=${title.vote_num}&room_num=${title.room_num }")'> 
+					 ${i }.${title.title }</a>
+					<c:if test="${title.vote_ing == '종료' }">
+					<span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill" style="color: #A4A4A4;">${title.vote_ing }</span>
+					</c:if>
+					<c:if test="${title.vote_ing != '종료' }">
+					<span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill" style="color: #FA5858;">${title.vote_ing }</span>
+					</c:if>
 					<c:if test="${planner.id_num == myId }">
-					<button class='btn btn-primary d-flex justify-content-end' onclick='deleteFinally("${title.room_num}","${title.vote_num }")'>삭제</button>
+					<button class='btn btn btn-outline-warning btn-sm d-flex flex-row-reverse' id="deleteBtnStyle" onclick='deleteFinally("${title.room_num}","${title.vote_num }")'>삭제</button>
 					</c:if>
 					<br>
 					<c:set var="i" value="${i+1 }"/>
 					</c:forEach>
-              	</div>
+				</div>
 			  </div>
 		      <div class="modal-footer">
 				<!-- 투표 만들기 버튼 -->

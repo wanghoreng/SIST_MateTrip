@@ -51,9 +51,15 @@ public class VoteCrt {
 			titleL += "<a href='#' id='voteTitleStyle'" 
 					+ "onclick='win_open(\"voteInfo_content.action?vote_num="+title.getVote_num()+"&room_num="+title.getRoom_num()+"\",\"팝업테스트\")'>" 
 					+ i +". "+ title.getTitle() + "</a>";
+			if (title.getVote_ing().equals("종료")) {
+				titleL += "<span class='badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill' style='color: #A4A4A4;'>"+title.getVote_ing()+"</span>";
+			}
+			else {
+				titleL += "<span class='badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill' style='color: #FA5858;'>"+title.getVote_ing()+"</span>";
+			}
 			if(boss.equals(mem_join_num))
 			{
-				titleL += "<button class='btn btn-primary d-flex justify-content-end' onclick='deleteFinally(\""+title.getRoom_num()+"\",\""+title.getVote_num()+"\")'>삭제</button>";
+				titleL += "<button class='btn btn-outline-warning btn-sm d-flex flex-row-reverse' id='deleteBtnStyle' onclick='deleteFinally(\""+title.getRoom_num()+"\",\""+title.getVote_num()+"\")'>삭제</button>";
 			}
 			titleL += "<br>";
         }

@@ -23,7 +23,11 @@
 	
 	<!-- 투표 제목 리스트 조회문 -->
 	<select id="voteTitle" resultType="com.final1.logic.VotesDTO">
-		SELECT *
+		<!-- SELECT *
+		FROM  VOTE
+		WHERE ROOM_NUM = #{room_num}
+		ORDER BY VOTE_NUM -->
+		SELECT VOTE_NUM, ROOM_NUM, TITLE, START_DATE, END_DATE, VOTE_SELECT_NUM, VOTE_NAME_NUM, <![CDATA[CASE WHEN END_DATE < TO_CHAR(TO_DATE(SYSDATE,'YYYY-MM-DD')) THEN '종료' ELSE '진행 중' END AS VOTE_ING]]>
 		FROM  VOTE
 		WHERE ROOM_NUM = #{room_num}
 		ORDER BY VOTE_NUM
@@ -153,4 +157,8 @@
 		FROM VOTE
 		WHERE ROOM_NUM = #{room_num} AND VOTE_NUM = #{vote_num}
 	</delete>
+	
+	
+	
+	
 </mapper>
