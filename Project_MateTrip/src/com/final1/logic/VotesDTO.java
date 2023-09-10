@@ -9,6 +9,20 @@ public class VotesDTO
 	// 투표 가능한 첫 날짜 ~ 마지막 날짜 
 	private String v_start_date, v_end_date;
 	
+	// 투표진행중인지 확인하는 변수 
+	private String vote_ing;
+	
+	
+	// 추가 7
+	public String getVote_ing() {
+		return vote_ing;
+	}
+
+	public void setVote_ing(String vote_ing) {
+		this.vote_ing = vote_ing;
+	}
+
+	
 	// 추가 6
 	public String getV_start_date() {
 		return v_start_date;
