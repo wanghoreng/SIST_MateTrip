@@ -1463,6 +1463,7 @@
     		<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   		</div>
   		<div class="offcanvas-body small">
+    	<!-- 
     	<span>PASS</span> : 메이트리더가 한 일차에 대해 선 PASS 를 할 경우,<br>
     						메이트들이 후 PASS 로 일자별 여행 계획에 동의하는 것을 말합니다.
     						<br><br>
@@ -1482,7 +1483,8 @@
     	② 일정이 수정 됐을 경우 <br>
     	③ 일정이 FIX 됐을 경우 <br>
     	④ 여행 Room 의 기본정보가 바뀌었을 경우<br> 
-    	
+    	--> 
+    	<c:import url="explanation.jsp"></c:import>
   		</div>
 	</div>
 
