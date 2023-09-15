@@ -117,6 +117,7 @@ s/bootstrap.min.js"></script>
 	function showMarker(n)
 	{		
 		markers = [];
+		polyline = null;
 		
 		var params = "day="+ n +"&room_num=" + $("#hidden_room_num").val();
 		
@@ -126,6 +127,7 @@ s/bootstrap.min.js"></script>
 		var latlng = new Array;
 		var centerLat = 0;
 		var centerLng = 0;
+		var infoWindow = new Array;
 		
 		$.ajax(
 		{
@@ -154,6 +156,7 @@ s/bootstrap.min.js"></script>
 					i = i + 1;
 				});
 				
+				
 				for (var j=0; j<i; j++) // i가 들어가는 것이 맞음 i+1 아님 (이미 증가했음)
 				{		
 					//alert("마커 추가");
@@ -170,7 +173,29 @@ s/bootstrap.min.js"></script>
 					map.setCenter(new kakao.maps.LatLng(centerLat, centerLng));
 				else
 					map.setCenter(new kakao.maps.LatLng(Number(initCenterLat), Number(initCenterLng)));
+				
+				polyline = new kakao.maps.Polyline(
+				{
+					path: latlng,
+					strokeWeight: 5,
+					strokeColor: 'green',
+					strokeOpacity: 0.7,
+					strokeStyle: 'solid',
+				});
+				polyline.setMap(map);
+				
+				for (j=0; j<i; j++)
+				{
 					
+					infoWindow[j] = new kakao.maps.InfoWindow(
+					{
+						position: latlng[j],
+						content: title[j],
+					});
+					kakao.maps.event.addListener(markers[j], "mouseover", makeOverListener(map, markers[j], infoWindow[j]));
+					kakao.maps.event.addListener(markers[j], "mouseout", makeOutListener(infoWindow[j]));
+					
+				}
 				
 			}											
 			, error:function(request,error)
@@ -183,6 +208,24 @@ s/bootstrap.min.js"></script>
 		});
 	}	
 
+	
+	function makeOverListener(map, marker, infowindow)
+	{
+	    return function()
+	    {
+	        infowindow.open(map, marker);
+	    };
+	}
+	
+	function makeOutListener(infowindow) 
+	{
+	    return function() 
+	    {
+	        infowindow.close();
+	    };
+	}
+		
+	
 	function addMarkers(position, title)
 	{
 		marker = new kakao.maps.Marker(
@@ -202,6 +245,8 @@ s/bootstrap.min.js"></script>
 		{
 			markers[i].setMap(map);
 		}
+		
+		polyline.setMap(null);
 	}
 
 
@@ -273,7 +318,9 @@ s/bootstrap.min.js"></script>
 			, data:$("#memoForm").serialize()
 			, success:function(args)
 			{
-				$(location).attr("href","planner.action");
+				//$(location).attr("href","planner.action");
+				$(".plannerlocMemo").html(args);
+				
 			}											
 			, error:function(e)
 			{
@@ -565,6 +612,9 @@ s/bootstrap.min.js"></script>
 					{
 						$(".plannerlocMemo").html(args);
 						
+						// 지도에 직선 표시 위함
+						whatDays(day);
+						
 					}											
 					, error:function(e)
 					{
@@ -590,6 +640,9 @@ s/bootstrap.min.js"></script>
 						, success:function(args)
 						{
 							$(".plannerlocMemo").html(args);
+							
+							// 지도에 직선 표시 위함
+							whatDays(day);
 						}											
 						, error:function(e)
 						{

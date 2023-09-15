@@ -95,7 +95,7 @@ public interface IRoomDAO
 	//추가 
 	public ArrayList<String> ogMemJoin(String room_num);
 	public int finAdd(String mem_join_num);
-	public int hostPassAlarmAdd(@Param("my_id") String my_id, @Param("room_num") String room_num);
+	public int hostPassAlarmAdd(@Param("mem_join_num") String mem_join_num, @Param("room_num") String room_num);
 	public ArrayList<BookMarkDTO> bookMarkList(String room_num);
 	public int bookMarkAlarm(String bookMarkNum);
 	public int goAlarm(String room_num);

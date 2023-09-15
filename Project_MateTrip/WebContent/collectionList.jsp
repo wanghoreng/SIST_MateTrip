@@ -287,7 +287,8 @@
 			, data:$("#memoForm").serialize()
 			, success:function(args)
 			{
-				$(location).attr("href","planner.action?page=-1");
+				//$(location).attr("href","planner.action?page=-1");
+				$("#collectionListPlace").html(args);
 			}											
 			, error:function(e)
 			{
