@@ -1173,8 +1173,7 @@
 						      </div>                                                                                                                                                                                  
 						                                                                                                                                                                                              
 						      <div class="modal-footer">                                                                                                                                                              
-						        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">저장</button>                                                                                                   
-						        <button type="button" class="btn btn-primary">닫기</button>                                                                                                                             
+						        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">닫기</button>                                                                                                   
 						      </div>                                                                                                                                                                                  
 						    </div>                                                                                                                                                                                    
 						  </div>                                                                                                                                                                                      

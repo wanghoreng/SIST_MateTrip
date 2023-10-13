@@ -44,6 +44,9 @@ s/bootstrap.min.js"></script>
 			{
 				$(".plannerlocMemo").html(args);
 				
+				// 지도에 직선 표시 위함
+				whatDays(day);
+				
 			}											
 			, error:function(e)
 			{
@@ -69,6 +72,9 @@ s/bootstrap.min.js"></script>
 				, success:function(args)
 				{
 					$(".plannerlocMemo").html(args);
+					
+					// 지도에 직선 표시 위함
+					whatDays(day);
 				}											
 				, error:function(e)
 				{

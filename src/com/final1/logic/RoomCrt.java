@@ -492,14 +492,22 @@ public class RoomCrt
 		
 		IRoomDAO dao = sqlSession.getMapper(IRoomDAO.class);
 		
-		System.out.println(memo);
-		System.out.println((String)session.getAttribute("room_num"));
-		System.out.println(day);
+		//System.out.println(memo);
+		//System.out.println((String)session.getAttribute("room_num"));
+		//System.out.println(day);
 		dao.addMemo(memo, (String)session.getAttribute("room_num"), day);
+		
+		model.addAttribute("planner", dao.planner((String)session.getAttribute("myId"), (String)session.getAttribute("room_num")));
+		ArrayList<PlannerLocMemoDTO> plannerLocMemo = dao.plannerLocMemo((String)session.getAttribute("room_num"));
+		model.addAttribute("plannerLocMemo", plannerLocMemo);
 		
 		model.addAttribute("memoResult", day);
 		
-		result = "/addMemo.jsp";
+		IAdminDAO dao2 = sqlSession.getMapper(IAdminDAO.class);
+		model.addAttribute("reportReceipt", dao2.reportReceiptPk());
+		
+		//result = "/addMemo.jsp";
+		result = "/AjaxPlannerLocMemo.jsp";
 		
 		return result;
 	}
@@ -772,7 +780,14 @@ public class RoomCrt
 		
 		model.addAttribute("memoResult", addResult);
 		
-		result = "/addMemo.jsp";
+		model.addAttribute("collectionList", dao.collectionList((String)session.getAttribute("room_num")));
+		model.addAttribute("myCollectionList", dao.myCollectionList((String)session.getAttribute("myId"), (String)session.getAttribute("room_num")));
+		model.addAttribute("planner", dao.planner((String)session.getAttribute("myId"), (String)session.getAttribute("room_num")));
+		model.addAttribute("my_join_num", dao.findJoinNum((String)session.getAttribute("myId"), (String)session.getAttribute("room_num")));
+		
+	
+		//result = "/addMemo.jsp";
+		result = "/ajaxCollectionListSelection.jsp?selection=0";
 		
 		return result;
 	}
