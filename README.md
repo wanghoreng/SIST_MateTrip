@@ -45,6 +45,16 @@
   
 </div>
 
+---
+
+## 화면 구성 요약 📺
+| 메인 페이지  |  플랜 페이지   |
+| :-------------------------------------------: | :------------: |
+|  <img width="329" src="https://github.com/wanghoreng/SIST_MateTrip/assets/140323690/3c960021-fa85-44cd-bf61-b645c9d3dee7.png"/> |  <img width="329" src="https://github.com/wanghoreng/SIST_MateTrip/assets/140323690/a2a0e109-d5fc-49c4-9188-43cc2551c064.png"/>|  
+| 마이페이지   |  관리자 페이지   |  
+| <img width="329" src="https://github.com/wanghoreng/SIST_MateTrip/assets/140323690/a35577d1-248a-4f6b-bfb9-279d62daf029.png"/>   |  <img width="329" src="https://github.com/wanghoreng/SIST_MateTrip/assets/140323690/0f6d7f1a-02b5-4961-a52a-2525f2e6565b.png"/>     |
+
+
 <br>
 
 ## 주요 기능 📦
