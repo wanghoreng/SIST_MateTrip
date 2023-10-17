@@ -85,5 +85,5 @@
 
 <br>
 
-#### 프로젝트 상세확인용 파일 다운
-<a href="https://github.com/wanghoreng/SIST_MateTrip/files/12905432/1._._._33.pdf">프로젝트 상세확인용 파일</a>
+#### 프로젝트 상세보고서 다운
+<a href="https://github.com/wanghoreng/SIST_MateTrip/files/12905432/1._._._33.pdf">프로젝트 상세보고서 파일</a>
