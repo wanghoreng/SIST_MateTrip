@@ -49,12 +49,12 @@
 
 ## 회원 및 비회원 유저 플로우 📬
 
-<img width="500" alt="MateTrip_회원 및 비회원 유저플로우" src="https://github.com/wanghoreng/SIST_MateTrip/assets/140323690/e3f3f8c9-9fbf-4fbb-a21f-3487bcb519a4.jpg"/>
+<img width="500" alt="MateTrip_회원 및 비회원 유저플로우" src="https://github.com/wanghoreng/SIST_MateTrip/assets/140323690/2d09ce8f-6276-49d0-a8f8-8eab37b8a2aa.jpeg"/>
 <br>
 
 ## ERD 설계 📱
 
-<img width="800" src="https://github.com/wanghoreng/SIST_MateTrip/assets/140323690/18c30df3-b841-4dc6-89cc-bb2428794921.jpg"/>
+<img width="800" src="https://github.com/wanghoreng/SIST_MateTrip/assets/140323690/e4f7539d-5536-49d8-ab35-f27c0857add6.jpeg"/>
 <br>
 
 ## 화면 구성 📺
