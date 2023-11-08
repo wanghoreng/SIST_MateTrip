@@ -54,7 +54,7 @@
 
 ## ERD 설계 📱
 
-<img src="https://github.com/wanghoreng/SIST_MateTrip/assets/140323690/18c30df3-b841-4dc6-89cc-bb2428794921.jpg"/>
+<img width="800" src="https://github.com/wanghoreng/SIST_MateTrip/assets/140323690/18c30df3-b841-4dc6-89cc-bb2428794921.jpg"/>
 <br>
 
 ## 화면 구성 📺
