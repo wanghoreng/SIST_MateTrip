@@ -90,6 +90,10 @@
 
 <br>
 
+## 개선할 점 
+- 페이지 로딩 속도 개선
+
+
 
 #### 프로젝트 상세보고서 다운
 <a href="https://github.com/wanghoreng/SIST_MateTrip/files/12905432/1._._._33.pdf">프로젝트 상세보고서 파일</a>
